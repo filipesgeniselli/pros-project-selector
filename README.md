@@ -44,3 +44,12 @@ curl -X POST -H 'Content-Type: application/json' \
 -d '{ "age": 35, "education_level": "high_school", "past_experiences": { "sales": false, "support": true }, "internet_test": { "download_speed": 50.2, "upload_speed": 40.2 }, "writing_score": 0.6, "referral_code": "token1234"}' \
 http://localhost:8080/projects/select
 ```
+
+## Considerations about the code
+
+### EducationLevelEnum
+This enum was created to prevent too much hardcoded strings and keep the code organized, this same strategy was not used to other business logic since most of them was related to values, this rules can be extended and changed when needed.
+
+### Spring validation
+The DTOs were validated using spring validation for the simplicity of implementation and better readability.
+
