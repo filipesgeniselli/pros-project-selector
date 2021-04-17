@@ -21,12 +21,12 @@ public class ProjectSelectorService {
         int score = calculateScore(proApplication);
         List<Projects> projects = loadProjects();
 
-        String[] ineligibleProjects = projects.stream().filter(project -> score < project.getMinScore()).map(Projects::getProjectCode).toArray(String[]::new);
+        String[] ineligibleProjects = projects.stream().filter(project -> score <= project.getMinScore()).map(Projects::getProjectCode).toArray(String[]::new);
         String[] elegibleProjects = projects.stream().filter(project -> score > project.getMinScore()).map(Projects::getProjectCode).toArray(String[]::new);
         String selectedProject = projects.stream()
             .filter(project -> score > project.getMinScore())
             .max(Comparator.comparing(Projects::getMinScore))
-            .orElse(new Projects("", 0)).getProjectCode();
+            .orElse(new Projects(null, -1)).getProjectCode();
 
         return new SelectedProjects(Integer.valueOf(score), selectedProject, elegibleProjects, ineligibleProjects);
     }
