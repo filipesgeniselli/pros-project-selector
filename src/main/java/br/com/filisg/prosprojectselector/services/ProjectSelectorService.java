@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -15,24 +16,26 @@ import br.com.filisg.prosprojectselector.enums.EducationLevelEnum;
 
 @Service
 public class ProjectSelectorService {
-    
+
     public SelectedProjects selectProject(ProApplication proApplication) {
 
         int score = calculateScore(proApplication);
         List<Projects> projects = loadProjects();
 
-        String[] ineligibleProjects = projects.stream().filter(project -> score <= project.getMinScore()).map(Projects::getProjectCode).toArray(String[]::new);
-        String[] elegibleProjects = projects.stream().filter(project -> score > project.getMinScore()).map(Projects::getProjectCode).toArray(String[]::new);
-        String selectedProject = projects.stream()
-            .filter(project -> score > project.getMinScore())
-            .max(Comparator.comparing(Projects::getMinScore))
-            .orElse(new Projects(null, -1)).getProjectCode();
+        String[] ineligibleProjects = projects.stream().filter(project -> score <= project.getMinScore())
+                .map(Projects::getProjectCode).toArray(String[]::new);
+
+        List<Projects> listEligibleProjects = projects.stream().filter(project -> score > project.getMinScore())
+                .collect(Collectors.toList());
+        String[] elegibleProjects = listEligibleProjects.stream().map(Projects::getProjectCode).toArray(String[]::new);
+        String selectedProject = listEligibleProjects.stream().max(Comparator.comparing(Projects::getMinScore))
+                .orElse(new Projects(null, -1)).getProjectCode();
 
         return new SelectedProjects(Integer.valueOf(score), selectedProject, elegibleProjects, ineligibleProjects);
     }
 
     protected int calculateScore(ProApplication proApplication) {
-        if(proApplication.getAge() < 18){
+        if (proApplication.getAge() < 18) {
             return -1;
         }
 
@@ -52,9 +55,9 @@ public class ProjectSelectorService {
     }
 
     protected int calculateScorePastExperiences(ProApplicationExperience pastExperiences) {
-        if(Boolean.TRUE.equals(pastExperiences.getSales())){
+        if (Boolean.TRUE.equals(pastExperiences.getSales())) {
             return 5;
-        } else if(Boolean.TRUE.equals(pastExperiences.getSupport())){
+        } else if (Boolean.TRUE.equals(pastExperiences.getSupport())) {
             return 3;
         } else {
             return 0;
@@ -62,9 +65,9 @@ public class ProjectSelectorService {
     }
 
     protected int calculateScoreInternetSpeed(BigDecimal internetSpeed) {
-        if(internetSpeed.compareTo(new BigDecimal(50)) > 0) {
+        if (internetSpeed.compareTo(new BigDecimal(50)) > 0) {
             return 1;
-        } else if(internetSpeed.compareTo(new BigDecimal(5)) < 0) {
+        } else if (internetSpeed.compareTo(new BigDecimal(5)) < 0) {
             return -1;
         } else {
             return 0;
@@ -72,9 +75,10 @@ public class ProjectSelectorService {
     }
 
     protected int calculateScoreWritingTest(BigDecimal writingScore) {
-        if(writingScore.compareTo(BigDecimal.valueOf(0.7)) > 0) {
+        if (writingScore.compareTo(BigDecimal.valueOf(0.7)) > 0) {
             return 2;
-        } else if(writingScore.compareTo(BigDecimal.valueOf(0.3)) >= 0 && writingScore.compareTo(BigDecimal.valueOf(0.7)) <= 0) {
+        } else if (writingScore.compareTo(BigDecimal.valueOf(0.3)) >= 0
+                && writingScore.compareTo(BigDecimal.valueOf(0.7)) <= 0) {
             return 1;
         } else {
             return -1;
@@ -82,7 +86,7 @@ public class ProjectSelectorService {
     }
 
     protected int checkReferralCode(String referralCode) {
-        if("token1234".equals(referralCode)){
+        if ("token1234".equals(referralCode)) {
             return 1;
         } else {
             return 0;
@@ -98,4 +102,4 @@ public class ProjectSelectorService {
         );
     }
 
-}   
+}
