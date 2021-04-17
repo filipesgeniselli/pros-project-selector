@@ -35,10 +35,10 @@ class ProjectSelectorControllerTests {
 
     @Test
     void invalidAgeShouldReturnBadRequest() throws Exception {
-        String simpleBodyWithoutAge = "{\"education_level\": \"high_school\", \"past_experiences\": { \"sales\": false, \"support\": true }, \"internet_test\": { \"download_speed\": 50.4, \"upload_speed\": 40.2 }, \"writing_score\": 0.6, \"referral_code\": \"token1234\" }";
+        String jsonBody = "{\"education_level\": \"high_school\", \"past_experiences\": { \"sales\": false, \"support\": true }, \"internet_test\": { \"download_speed\": 50.4, \"upload_speed\": 40.2 }, \"writing_score\": 0.6, \"referral_code\": \"token1234\" }";
 
         mockMvc.perform(MockMvcRequestBuilders.post("/projects/select")
-                .content(simpleBodyWithoutAge)
+                .content(jsonBody)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.age", Is.is("Age must be informed")));
@@ -46,10 +46,10 @@ class ProjectSelectorControllerTests {
 
     @Test
     void invalidEducationLevel__ShouldReturnBadRequest() throws Exception {
-        String simpleBodyWithoutAge = "{\"age\": 32, \"education_level\": \"not_informed\", \"past_experiences\": { \"sales\": false, \"support\": true }, \"internet_test\": { \"download_speed\": 50.4, \"upload_speed\": 40.2 }, \"writing_score\": 0.6, \"referral_code\": \"token1234\" }";
+        String jsonBody = "{\"age\": 32, \"education_level\": \"not_informed\", \"past_experiences\": { \"sales\": false, \"support\": true }, \"internet_test\": { \"download_speed\": 50.4, \"upload_speed\": 40.2 }, \"writing_score\": 0.6, \"referral_code\": \"token1234\" }";
 
         mockMvc.perform(MockMvcRequestBuilders.post("/projects/select")
-                .content(simpleBodyWithoutAge)
+                .content(jsonBody)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.educationLevel", Is.is("Education level must be informed and one of the following(no_education, high_school, bachelors_degree_or_high)")));
@@ -57,10 +57,10 @@ class ProjectSelectorControllerTests {
 
     @Test
     void nullEducationLevel__ShouldReturnBadRequest() throws Exception {
-        String simpleBodyWithoutAge = "{\"age\": 32, \"past_experiences\": { \"sales\": false, \"support\": true }, \"internet_test\": { \"download_speed\": 50.4, \"upload_speed\": 40.2 }, \"writing_score\": 0.6, \"referral_code\": \"token1234\" }";
+        String jsonBody = "{\"age\": 32, \"past_experiences\": { \"sales\": false, \"support\": true }, \"internet_test\": { \"download_speed\": 50.4, \"upload_speed\": 40.2 }, \"writing_score\": 0.6, \"referral_code\": \"token1234\" }";
 
         mockMvc.perform(MockMvcRequestBuilders.post("/projects/select")
-                .content(simpleBodyWithoutAge)
+                .content(jsonBody)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.educationLevel", Is.is("Education level must be informed and one of the following(no_education, high_school, bachelors_degree_or_high)")));
@@ -68,10 +68,10 @@ class ProjectSelectorControllerTests {
 
     @Test
     void nullPastExperiences__ShouldReturnBadRequest() throws Exception {
-        String simpleBodyWithoutAge = "{\"age\": 32, \"education_level\": \"high_school\", \"internet_test\": { \"download_speed\": 50.4, \"upload_speed\": 40.2 }, \"writing_score\": 0.6, \"referral_code\": \"token1234\" }";
+        String jsonBody = "{\"age\": 32, \"education_level\": \"high_school\", \"internet_test\": { \"download_speed\": 50.4, \"upload_speed\": 40.2 }, \"writing_score\": 0.6, \"referral_code\": \"token1234\" }";
 
         mockMvc.perform(MockMvcRequestBuilders.post("/projects/select")
-                .content(simpleBodyWithoutAge)
+                .content(jsonBody)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.pastExperiences", Is.is("Past experiences must be informed")));
@@ -79,10 +79,10 @@ class ProjectSelectorControllerTests {
 
     @Test
     void invalidPastExperiences__ShouldReturnBadRequest() throws Exception {
-        String simpleBodyWithoutAge = "{\"age\": 32, \"education_level\": \"high_school\", \"past_experiences\": {}, \"internet_test\": { \"download_speed\": 50.4, \"upload_speed\": 40.2 }, \"writing_score\": 0.6, \"referral_code\": \"token1234\" }";
+        String jsonBody = "{\"age\": 32, \"education_level\": \"high_school\", \"past_experiences\": {}, \"internet_test\": { \"download_speed\": 50.4, \"upload_speed\": 40.2 }, \"writing_score\": 0.6, \"referral_code\": \"token1234\" }";
 
         mockMvc.perform(MockMvcRequestBuilders.post("/projects/select")
-                .content(simpleBodyWithoutAge)
+                .content(jsonBody)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.['pastExperiences.sales']", Is.is("Sales experience must be informed")))
@@ -91,10 +91,10 @@ class ProjectSelectorControllerTests {
 
     @Test
     void nullInternetTest__ShouldReturnBadRequest() throws Exception {
-        String simpleBodyWithoutAge = "{\"age\": 32, \"education_level\": \"high_school\", \"past_experiences\": { \"sales\": false, \"support\": true }, \"writing_score\": 0.6}";
+        String jsonBody = "{\"age\": 32, \"education_level\": \"high_school\", \"past_experiences\": { \"sales\": false, \"support\": true }, \"writing_score\": 0.6}";
 
         mockMvc.perform(MockMvcRequestBuilders.post("/projects/select")
-                .content(simpleBodyWithoutAge)
+                .content(jsonBody)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.internetTest", Is.is("Internet test must be informed")));
@@ -102,10 +102,10 @@ class ProjectSelectorControllerTests {
 
     @Test
     void invalidInternetTest__ShouldReturnBadRequest() throws Exception {
-        String simpleBodyWithoutAge = "{\"age\": 32, \"education_level\": \"high_school\", \"past_experiences\": { \"sales\": false, \"support\": true }, \"internet_test\": {}, \"writing_score\": 0.6}";
+        String jsonBody = "{\"age\": 32, \"education_level\": \"high_school\", \"past_experiences\": { \"sales\": false, \"support\": true }, \"internet_test\": {}, \"writing_score\": 0.6}";
 
         mockMvc.perform(MockMvcRequestBuilders.post("/projects/select")
-                .content(simpleBodyWithoutAge)
+                .content(jsonBody)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.['internetTest.downloadSpeed']", Is.is("Download speed must be informed")))
@@ -114,10 +114,10 @@ class ProjectSelectorControllerTests {
 
     @Test
     void emptyWritingScore__ShouldReturnBadRequest() throws Exception {
-        String simpleBodyWithoutAge = "{\"age\": 32, \"education_level\": \"high_school\", \"past_experiences\": { \"sales\": false, \"support\": true }, \"internet_test\": { \"download_speed\": 50.4, \"upload_speed\": 40.2 } }";
+        String jsonBody = "{\"age\": 32, \"education_level\": \"high_school\", \"past_experiences\": { \"sales\": false, \"support\": true }, \"internet_test\": { \"download_speed\": 50.4, \"upload_speed\": 40.2 } }";
 
         mockMvc.perform(MockMvcRequestBuilders.post("/projects/select")
-                .content(simpleBodyWithoutAge)
+                .content(jsonBody)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.writingScore", Is.is("Writing score must be informed")));
@@ -125,20 +125,20 @@ class ProjectSelectorControllerTests {
 
     @Test
     void emptyReferralCode__ShouldReturnOk() throws Exception {
-        String simpleBodyWithoutAge = "{\"age\": 32, \"education_level\": \"high_school\", \"past_experiences\": { \"sales\": false, \"support\": true }, \"internet_test\": { \"download_speed\": 50.4, \"upload_speed\": 40.2 }, \"writing_score\": 0.6}";
+        String jsonBody = "{\"age\": 32, \"education_level\": \"high_school\", \"past_experiences\": { \"sales\": false, \"support\": true }, \"internet_test\": { \"download_speed\": 50.4, \"upload_speed\": 40.2 }, \"writing_score\": 0.6}";
 
         mockMvc.perform(MockMvcRequestBuilders.post("/projects/select")
-                .content(simpleBodyWithoutAge)
+                .content(jsonBody)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
     @Test
     void allParamsValid__ShouldReturnOk() throws Exception {
-        String simpleBodyWithoutAge = "{\"age\": 32, \"education_level\": \"high_school\", \"past_experiences\": { \"sales\": false, \"support\": true }, \"internet_test\": { \"download_speed\": 50.4, \"upload_speed\": 40.2 }, \"writing_score\": 0.6, \"referral_code\": \"token1234\" }";
+        String jsonBody = "{\"age\": 32, \"education_level\": \"high_school\", \"past_experiences\": { \"sales\": false, \"support\": true }, \"internet_test\": { \"download_speed\": 50.4, \"upload_speed\": 40.2 }, \"writing_score\": 0.6, \"referral_code\": \"token1234\" }";
 
         mockMvc.perform(MockMvcRequestBuilders.post("/projects/select")
-                .content(simpleBodyWithoutAge)
+                .content(jsonBody)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
